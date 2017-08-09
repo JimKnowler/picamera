@@ -63,6 +63,8 @@ from .exc import (
     PiCameraDeprecated,
     )
 
+import time;    # JK 09/08/2017 - used to work around race-condition/segfault
+
 
 # Old firmwares confuse the RGB24 and BGR24 encodings. This flag tracks whether
 # the order needs fixing (it is set during MMALCamera.__init__).
@@ -3630,6 +3632,10 @@ class MMALPythonConnection(MMALBaseConnection):
         """
         Disables the connection.
         """
+        # >> JK 09/08/2017 - HACK - adding sleep to avoid race-condition / segmentation fault
+        time.sleep(0.1)
+        # <<
+
         self._enabled = False
         self._source.disable()
         self._target.disable()
